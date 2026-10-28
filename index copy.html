@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fff8df">
+    <title>มีเรื่องอยากถาม 💌</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100svh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+            color: #51452e;
+            background:
+                radial-gradient(circle at 12% 18%, #f4cb59 0 3px, transparent 4px),
+                radial-gradient(circle at 88% 78%, #f4cb59 0 4px, transparent 5px),
+                radial-gradient(circle at 80% 16%, #f8df91 0 2px, transparent 3px),
+                #fff8df;
+            font-family: "Leelawadee UI", Tahoma, sans-serif;
+        }
+
+        .card {
+            width: min(100%, 440px);
+            padding: clamp(28px, 8vw, 42px) clamp(20px, 7vw, 32px);
+            text-align: center;
+            background: rgba(255, 255, 250, 0.94);
+            border: 1px solid #fffef5;
+            border-radius: 28px;
+            box-shadow: 0 18px 55px rgba(157, 119, 39, 0.16);
+        }
+
+        .envelope {
+            display: grid;
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 20px;
+            place-items: center;
+            background: #fff0bd;
+            border-radius: 50%;
+            font-size: 40px;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            color: #a96816;
+            font-size: clamp(26px, 7vw, 34px);
+        }
+
+        p {
+            margin: 0;
+            color: #766b53;
+            font-size: clamp(15px, 4vw, 17px);
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .question {
+            margin: 20px 0 24px;
+            color: #51452e;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        button {
+            min-height: 48px;
+            padding: 12px 22px;
+            border: 0;
+            border-radius: 999px;
+            font: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 160ms ease, box-shadow 160ms ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:focus-visible {
+            outline: 3px solid #51452e;
+            outline-offset: 3px;
+        }
+
+        .yes {
+            color: white;
+            background: #dfa526;
+            box-shadow: 0 6px 16px rgba(190, 133, 34, 0.32);
+        }
+
+        .later {
+            color: #6f6248;
+            background: #f4efd9;
+        }
+
+        .confirmation-dialog {
+            width: min(calc(100% - 32px), 440px);
+            max-height: calc(100vh - 32px);
+            max-height: calc(100svh - 32px);
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: clamp(24px, 7vw, 36px) clamp(18px, 6vw, 28px);
+            color: #51452e;
+            text-align: center;
+            background: #fffefa;
+            border: 1px solid #fff;
+            border-radius: 24px;
+            box-shadow: 0 18px 55px rgba(100, 75, 30, 0.24);
+        }
+
+        .confirmation-dialog::backdrop {
+            background: rgba(57, 48, 30, 0.48);
+            backdrop-filter: blur(4px);
+        }
+
+        .confirmation-dialog h2 {
+            margin: 0 0 14px;
+            color: #8d5b19;
+            font-size: clamp(20px, 6vw, 24px);
+        }
+
+        .confirmation-dialog p {
+            margin-bottom: 24px;
+        }
+
+        .confirmation-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .confirmation-no {
+            color: #51452e;
+            background: #f1eee6;
+        }
+
+        @media (max-width: 480px) {
+            .buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .buttons .yes,
+            .confirmation-actions button {
+                width: 100%;
+                min-height: 50px;
+            }
+
+            .buttons .later {
+                align-self: center;
+            }
+
+            .confirmation-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-height: 520px) {
+            body {
+                place-items: start center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <div class="envelope" aria-hidden="true">🌻</div>
+        <h1>มีเรื่องอยากถาม...</h1>
+        <p>เรารู้สึกว่าเธอน่ารักมากเลย<br>ขออนุญาตทำความรู้จักได้ไหม?</p>
+        <p class="question">ให้เราจีบได้หรือเปล่า 😊</p>
+        <div class="buttons">
+            <button class="yes" type="button" onclick="showConfirmation()">ได้สิ 💖</button>
+            <button class="later" type="button" onpointerenter="runAway(event)" onclick="showAnswer('later')">ขอคิดดูก่อนนะ 🌷</button>
+        </div>
+    </main>
+    <dialog class="confirmation-dialog" id="confirmation-dialog" aria-labelledby="confirmation-title">
+        <div class="envelope" aria-hidden="true">🌻</div>
+        <h2 id="confirmation-title">ขอถามพี่อย่างจริงจังนะครับ</h2>
+        <p>ผมรู้สึกดีกับพี่จริงๆ และอยากทำความรู้จักพี่ให้มากขึ้น<br>พี่อนุญาตให้ผมจีบไหมครับ?</p>
+        <div class="confirmation-actions">
+            <button class="yes" type="button" onclick="showAnswer('yes')">ได้ 💛</button>
+            <button class="confirmation-no" type="button" onclick="showAnswer('no')">ไม่ได้</button>
+        </div>
+    </dialog>
+    <dialog class="confirmation-dialog" id="answer-dialog" aria-labelledby="answer-title">
+        <div class="envelope" id="answer-icon" aria-hidden="true">🌻</div>
+        <h2 id="answer-title"></h2>
+        <p id="answer-message" aria-live="polite"></p>
+        <button class="yes" type="button" onclick="closeAnswer()">ปิด 💛</button>
+    </dialog>
+    <script>
+        function runAway(event) {
+            if (event.pointerType !== "mouse") {
+                return;
+            }
+
+            const yesButton = document.querySelector(".yes");
+            const growth = Number(yesButton.dataset.growth || 0) + 1;
+            yesButton.dataset.growth = growth;
+            yesButton.style.fontSize = `${Math.min(16 + growth * 2, 32)}px`;
+            yesButton.style.padding = `${Math.min(12 + growth, 20)}px ${Math.min(22 + growth, 30)}px`;
+
+            const button = event.currentTarget;
+            const margin = 12;
+            const maxX = Math.max(margin, window.innerWidth - button.offsetWidth - margin);
+            const maxY = Math.max(margin, window.innerHeight - button.offsetHeight - margin);
+            let left = margin;
+            let top = margin;
+
+            for (let attempt = 0; attempt < 20; attempt++) {
+                left = margin + Math.random() * (maxX - margin);
+                top = margin + Math.random() * (maxY - margin);
+                const centerX = left + button.offsetWidth / 2;
+                const centerY = top + button.offsetHeight / 2;
+
+                if (Math.hypot(centerX - event.clientX, centerY - event.clientY) > 100) {
+                    break;
+                }
+            }
+
+            button.style.position = "fixed";
+            button.style.left = `${left}px`;
+            button.style.top = `${top}px`;
+            button.style.zIndex = "1";
+        }
+
+        function showAnswer(choice) {
+            if (choice !== "later") {
+                document.getElementById("confirmation-dialog").close();
+            }
+
+            const title = document.getElementById("answer-title");
+            const message = document.getElementById("answer-message");
+            const icon = document.getElementById("answer-icon");
+            if (choice === "yes") {
+                title.textContent = "ขอบคุณที่ให้โอกาสนะครับพี่";
+                message.textContent = "ผมจะค่อยๆ ทำความรู้จักพี่ให้ดีที่สุดครับ 💛";
+                icon.textContent = "🌻";
+            } else if (choice === "no") {
+                title.textContent = "ขอบคุณที่บอกกันตรงๆ นะครับ";
+                message.textContent = "ผมเคารพการตัดสินใจของพี่ครับ 💛";
+                icon.textContent = "🤍";
+            } else {
+                title.textContent = "ไม่เป็นไรครับพี่";
+                message.textContent = "ค่อยๆ คิดได้ ไม่ต้องรีบนะครับ ขอบคุณที่รับฟังผม 💛";
+                icon.textContent = "🌷";
+            }
+            document.getElementById("answer-dialog").showModal();
+        }
+
+        function closeAnswer() {
+            document.getElementById("answer-dialog").close();
+        }
+
+        function showConfirmation() {
+            document.getElementById("confirmation-dialog").showModal();
+        }
+    </script>
+</body>
+</html>
